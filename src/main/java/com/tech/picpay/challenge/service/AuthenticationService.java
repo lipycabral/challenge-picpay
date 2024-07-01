@@ -14,7 +14,8 @@ public class AuthenticationService {
     private UserRepository userRepository;
     private BCryptPasswordEncoder passwordEncoder;
 
-    public AuthenticationService(JwtService jwtService, UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public AuthenticationService(JwtService jwtService, UserRepository userRepository,
+            BCryptPasswordEncoder passwordEncoder) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
