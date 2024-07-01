@@ -16,13 +16,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("user")
 public class UserController {
     private final UserService userService;
+    @Autowired
+    private AuthenticationService authenticationService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
-    @Autowired
-    private AuthenticationService authenticationService;
 
     @PostMapping("authenticate")
     public ResponseEntity<String> authenticate(
@@ -36,7 +35,6 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('SCOPE_user')")
     public ResponseEntity<UserEntity> getUser(Authentication authentication) {
         return ResponseEntity.ok(userService.getUser(Long.valueOf(authentication.getName())));
     }

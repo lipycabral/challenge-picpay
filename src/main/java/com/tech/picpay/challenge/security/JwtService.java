@@ -1,13 +1,12 @@
 package com.tech.picpay.challenge.security;
 
+import com.tech.picpay.challenge.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
-
-import com.tech.picpay.challenge.entity.UserEntity;
 
 import java.time.Instant;
 import java.util.stream.Collectors;
@@ -41,7 +40,7 @@ public class JwtService {
                 .build();
 
         return encoder.encode(
-                JwtEncoderParameters.from(claims))
+                        JwtEncoderParameters.from(claims))
                 .getTokenValue();
     }
 

@@ -40,13 +40,12 @@ public class Role {
         USER(1L, "user"),
         MERCHANT(2L, "merchant");
 
+        private Long id;
+        private String name;
         Enum(Long id, String name) {
             this.id = id;
             this.name = name;
         }
-
-        private Long id;
-        private String name;
 
         public Role get() {
             return new Role(id, name);

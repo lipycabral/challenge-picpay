@@ -3,7 +3,6 @@ package com.tech.picpay.challenge.security;
 import com.tech.picpay.challenge.entity.Role;
 import com.tech.picpay.challenge.exception.UserNotFoundException;
 import com.tech.picpay.challenge.repository.UserRepository;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
