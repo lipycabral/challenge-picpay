@@ -1,11 +1,13 @@
 package com.tech.picpay.challenge.service;
 
+import com.tech.picpay.challenge.client.DeviClient;
 import com.tech.picpay.challenge.controller.dto.TransferDTO;
 import com.tech.picpay.challenge.entity.Transaction;
 import com.tech.picpay.challenge.entity.UserEntity;
 import com.tech.picpay.challenge.entity.Wallet;
 import com.tech.picpay.challenge.exception.InsufficientBalanceException;
 import com.tech.picpay.challenge.exception.TransferToSameAccountException;
+import com.tech.picpay.challenge.exception.TransferUnauthorizedException;
 import com.tech.picpay.challenge.exception.UserNotFoundException;
 import com.tech.picpay.challenge.repository.TransactionRepository;
 import com.tech.picpay.challenge.repository.UserRepository;
@@ -19,11 +21,13 @@ public class TransactionService {
     private final UserRepository userRepository;
     private final TransactionRepository transactionRepository;
     private final WalletRepository walletRepository;
+    private final DeviClient deviClient;
 
-    public TransactionService(UserRepository userRepository, TransactionRepository transactionRepository, WalletRepository walletRepository) {
+    public TransactionService(UserRepository userRepository, TransactionRepository transactionRepository, WalletRepository walletRepository, DeviClient deviClient) {
         this.userRepository = userRepository;
         this.transactionRepository = transactionRepository;
         this.walletRepository = walletRepository;
+        this.deviClient = deviClient;
     }
 
     @Transactional
@@ -47,6 +51,17 @@ public class TransactionService {
 
         walletRepository.save(walletPayer);
         walletRepository.save(walletPayee);
+
+        try {
+            var resp = deviClient.checkAuthorize();
+
+            if (resp.getStatusCode().isError() || resp.getBody() == null || !resp.getBody().getAuthorization()) {
+                throw new TransferUnauthorizedException();
+            }
+
+        } catch (Exception e) {
+            throw new TransferUnauthorizedException();
+        }
 
         return transactionRepository.save(new Transaction(payerDb.getWallet(), walletPayee, dto.value()));
     }
